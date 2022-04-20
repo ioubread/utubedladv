@@ -22,6 +22,8 @@ def func90Title(videoID):
     disallowedCharacters = "._?*><:\"|\\|/"
     for disallowedCharacter in disallowedCharacters:
         titleOneline = titleOneline.replace(disallowedCharacter, "")
+    
+    titleOneline = titleOneline.rstrip(" - YouTube")
 
     previousFilename = f"{outputDir}\\{videoID}.{fileExt}"
     newFilename = f"{titleOneline}.{fileExt}"
