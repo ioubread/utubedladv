@@ -1,19 +1,28 @@
 import subprocess
 import json
+import eyed3
 
 def func05Uploader(videoID):
-    
-    youtubeVideoIDIs = videoID
 
-    commandToGetJson = f"youtube-dl {youtubeVideoIDIs} --dump-single-json"
+    fileExtension = "mp3"
+    fileBasename = videoID
+    filename = f"{fileBasename}.{fileExtension}"
+    outputDir = "output"
+
+    commandToGetJson = f"youtube-dl https://www.youtube.com/watch?v={videoID} --dump-single-json"
     commandToGetJsonShattered = commandToGetJson.split(" ")
+
     outputGetJson = subprocess.run(commandToGetJsonShattered, capture_output=True)
     outputGetJsonDecoded = outputGetJson.stdout.decode('utf-8')
-    convertToJson = json.loads(outputGetJsonDecoded)
-    uploaderName = convertToJson['uploader']
 
-    outputDir = "output"
-    fileExt = "mp3"
-    actualCommand = f"eyed3 {outputDir}/{videoID}.{fileExt} -a \"{uploaderName}\""
-    actualCommandSplitted = actualCommand.split(" ")
-    subprocess.call(actualCommandSplitted, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    try:
+        convertToJson = json.loads(outputGetJsonDecoded)
+        convertToJson = json.loads(outputGetJsonDecoded)
+        uploaderName = convertToJson['uploader']
+    except:
+        uploaderName = "Unknown"
+        print(f"{videoID}: UNKNOWN")
+
+    musicFileTagged = eyed3.load(f"{outputDir}/{filename}")
+    musicFileTagged.tag.artist = uploaderName
+    musicFileTagged.tag.save()
