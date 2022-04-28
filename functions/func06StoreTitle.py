@@ -35,7 +35,7 @@ def func06StoreTitle(videoID):
         titleOneline = titleOneline[:-10]
         # print(titleOneline)
 
-    titleOneline = titleOneline.rstrip(" - YouTube")
+    # titleOneline = titleOneline.rstrip(" - YouTube")
 
     if len((titleOneline).strip()) == 0:
         titleOneline = videoID
